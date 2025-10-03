@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Command, Sparkles, Brain, Zap, Globe, Star } from 'lucide-react'
+import { LiquidCanvas, LiquidMorph, LiquidThemeTransition } from './components/LiquidAnimations'
+import { AutoOptimizer, PerformanceMonitor, useAdaptivePerformance } from './components/PerformanceOptimizer'
+import { SkipLinks, FocusIndicator, AccessibilityControls, useScreenReaderAnnouncements } from './components/AccessibilityEnhancer'
 import './App.css'
 
 // Composant Particules Organiques simplifié
@@ -71,21 +74,35 @@ const CommandPaletteTrigger = ({ onOpen }) => {
 }
 
 // Composant Hero Section
-const HeroSection = ({ onCommandOpen }) => {
+const HeroSection = ({ onCommandOpen, optimizationSettings }) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <ParticleField count={80} />
+      {optimizationSettings.enableParticles && (
+        <LiquidCanvas 
+          particleCount={optimizationSettings.particleCount} 
+          viscosity={0.9}
+          attraction={0.15}
+          repulsion={0.2}
+          className="opacity-80"
+        />
+      )}
       
       {/* Background morphing */}
       <div className="absolute inset-0 morphing-background opacity-60" />
       
       {/* Liquid Glass Container */}
-      <motion.div 
-        className="liquid-glass p-12 rounded-3xl max-w-4xl mx-auto text-center relative z-10"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: "easeOut" }}
+      <LiquidMorph 
+        isActive={true}
+        morphType="organic"
+        speed={0.8}
+        className="max-w-4xl mx-auto relative z-10"
       >
+        <motion.div 
+          className="liquid-glass p-12 rounded-3xl text-center"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        >
         {/* Logo et titre */}
         <motion.div
           className="mb-8"
@@ -147,7 +164,8 @@ const HeroSection = ({ onCommandOpen }) => {
             Essayez : "Palette bleu océan", "Mode coucher de soleil", "Performances système"
           </p>
         </motion.div>
-      </motion.div>
+        </motion.div>
+      </LiquidMorph>
     </section>
   )
 }
@@ -266,11 +284,28 @@ const SimpleCommandPalette = ({ isOpen, onClose }) => {
 // Composant principal App
 function App() {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
+  const [themeTransitioning, setThemeTransitioning] = useState(false)
+  const [currentTheme, setCurrentTheme] = useState({
+    primary: '#667eea',
+    secondary: '#764ba2'
+  })
   const [metrics, setMetrics] = useState({
     interactions: 0,
     performance: 98,
     adaptations: 0
   })
+
+  // Hooks d'optimisation
+  const { optimizationSettings, performanceLevel } = useAdaptivePerformance()
+  const { announce, AnnouncementRegion } = useScreenReaderAnnouncements()
+
+  // Mise à jour des métriques de performance
+  const handleMetricsUpdate = (newMetrics) => {
+    setMetrics(prev => ({
+      ...prev,
+      performance: newMetrics.fps > 55 ? Math.min(98, prev.performance + 1) : Math.max(60, prev.performance - 2)
+    }))
+  }
   
   // Gestion des raccourcis clavier
   useEffect(() => {
@@ -294,7 +329,19 @@ function App() {
   }
   
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
+    <AutoOptimizer>
+      <SkipLinks />
+      <FocusIndicator />
+      <PerformanceMonitor onMetricsUpdate={handleMetricsUpdate} />
+      <AnnouncementRegion />
+      
+      <LiquidThemeTransition
+        isTransitioning={themeTransitioning}
+        fromTheme={currentTheme}
+        toTheme={currentTheme}
+        onComplete={() => setThemeTransitioning(false)}
+      >
+        <div className="min-h-screen relative overflow-x-hidden" id="main-content">
       {/* Navigation fixe avec liquid glass */}
       <motion.nav 
         className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 liquid-glass px-6 py-3 rounded-2xl"
@@ -330,7 +377,7 @@ function App() {
       </motion.nav>
       
       {/* Contenu principal */}
-      <HeroSection onCommandOpen={handleCommandOpen} />
+      <HeroSection onCommandOpen={handleCommandOpen} optimizationSettings={optimizationSettings} />
       <FeaturesSection />
       
       {/* Command Palette simplifié */}
@@ -350,7 +397,11 @@ function App() {
           </p>
         </div>
       </footer>
-    </div>
+        </div>
+      </LiquidThemeTransition>
+      
+      <AccessibilityControls />
+    </AutoOptimizer>
   )
 }
 
