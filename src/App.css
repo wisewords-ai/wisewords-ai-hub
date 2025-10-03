@@ -1,0 +1,290 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Variables CSS personnalisées pour le design nacré */
+:root {
+  /* Couleurs nacrées Apple */
+  --nacre-base: #f8fafc;
+  --nacre-shimmer-1: #e0e7ff;
+  --nacre-shimmer-2: #fce7f3;
+  --nacre-shimmer-3: #ecfdf5;
+  --nacre-shimmer-4: #fef3c7;
+  
+  /* Dégradés iridescents */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  
+  /* Effets de verre */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  
+  /* Transitions fluides */
+  --transition-smooth: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Radius et espacements */
+  --radius: 1rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  
+  /* Variables Tailwind existantes */
+  --background: oklch(0.98 0.02 240);
+  --foreground: oklch(0.15 0.05 240);
+  --card: oklch(0.99 0.01 240);
+  --card-foreground: oklch(0.15 0.05 240);
+  --popover: oklch(0.99 0.01 240);
+  --popover-foreground: oklch(0.15 0.05 240);
+  --primary: oklch(0.6 0.15 240);
+  --primary-foreground: oklch(0.98 0.02 240);
+  --secondary: oklch(0.95 0.03 240);
+  --secondary-foreground: oklch(0.2 0.05 240);
+  --muted: oklch(0.95 0.03 240);
+  --muted-foreground: oklch(0.55 0.05 240);
+  --accent: oklch(0.92 0.05 300);
+  --accent-foreground: oklch(0.2 0.05 240);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.9 0.03 240);
+  --input: oklch(0.9 0.03 240);
+  --ring: oklch(0.6 0.15 240);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* Thème sombre nacré */
+.dark {
+  --background: oklch(0.08 0.02 240);
+  --foreground: oklch(0.95 0.02 240);
+  --card: oklch(0.12 0.02 240);
+  --card-foreground: oklch(0.95 0.02 240);
+  --popover: oklch(0.12 0.02 240);
+  --popover-foreground: oklch(0.95 0.02 240);
+  --primary: oklch(0.7 0.15 240);
+  --primary-foreground: oklch(0.08 0.02 240);
+  --secondary: oklch(0.18 0.02 240);
+  --secondary-foreground: oklch(0.95 0.02 240);
+  --muted: oklch(0.18 0.02 240);
+  --muted-foreground: oklch(0.65 0.05 240);
+  --accent: oklch(0.25 0.05 300);
+  --accent-foreground: oklch(0.95 0.02 240);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(0.2 0.02 240);
+  --input: oklch(0.2 0.02 240);
+  --ring: oklch(0.7 0.15 240);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* Classes utilitaires pour le design nacré */
+.liquid-glass {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%) brightness(110%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
+  transition: var(--transition-smooth);
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  height: 200%;
+  backdrop-filter: blur(16px) saturate(180%) brightness(110%);
+  mask-image: linear-gradient(
+    to bottom,
+    black 0% 50%,
+    transparent 50% 100%
+  );
+  z-index: -1;
+  pointer-events: none;
+}
+
+.nacre-surface {
+  background: linear-gradient(
+    135deg,
+    var(--nacre-shimmer-1) 0%,
+    var(--nacre-shimmer-2) 25%,
+    var(--nacre-shimmer-3) 50%,
+    var(--nacre-shimmer-4) 75%,
+    var(--nacre-shimmer-1) 100%
+  );
+  background-size: 400% 400%;
+  animation: nacre-shimmer 8s ease infinite;
+}
+
+@keyframes nacre-shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.iridescent-text {
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.particle-field {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float-particle 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float-particle {
+  0%, 100% { 
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: translateY(-20px) translateX(10px) scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+.morphing-background {
+  background: var(--gradient-background);
+  background-size: 400% 400%;
+  animation: morph-background 12s ease infinite;
+  transition: var(--transition-smooth);
+}
+
+@keyframes morph-background {
+  0% { background-position: 0% 50%; }
+  33% { background-position: 100% 0%; }
+  66% { background-position: 0% 100%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hover-lift {
+  transition: var(--transition-bounce);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.command-palette-trigger {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem 1.5rem;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 500;
+  color: var(--foreground);
+  transition: var(--transition-smooth);
+  cursor: pointer;
+}
+
+.command-palette-trigger:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Optimisations performance */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.efficient-render {
+  contain: layout style paint;
+  isolation: isolate;
+}
+
+/* Responsive et accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  .particle,
+  .nacre-surface,
+  .iridescent-text,
+  .morphing-background {
+    animation: none;
+  }
+  
+  .hover-lift {
+    transition: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .liquid-glass::before {
+    backdrop-filter: blur(8px) saturate(150%);
+  }
+  
+  .particle {
+    display: none;
+  }
+}
+
+/* Base Tailwind */
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+    outline-color: hsl(var(--ring) / 50%);
+  }
+  
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--gradient-background);
+    min-height: 100vh;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+}
